@@ -308,6 +308,8 @@ Each entry in `FAULT_DATA` is a fault pattern object. A typical example:
   "notes_for_app": "Generic pattern applicable to most electric BMUs."
 }
 
+_____
+
 7.1 Field meanings
 	•	manufacturer
 Manufacturer name or "generic-BMU".
