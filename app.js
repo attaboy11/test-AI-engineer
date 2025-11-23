@@ -26,6 +26,10 @@ document.addEventListener('DOMContentLoaded', () => {
   els.searchInput = document.getElementById('searchInput');
   els.summaryLine = document.getElementById('summaryLine');
   els.faultResults = document.getElementById('faultResults');
+  els.checklistCards = document.getElementById('checklistCards');
+  els.rescuePrompts = document.getElementById('rescuePrompts');
+  els.siteNotes = document.getElementById('siteNotes');
+  els.trainingCards = document.getElementById('trainingCards');
 
   if (!Array.isArray(FAULT_DATA) || FAULT_DATA.length === 0) {
     els.faultResults.innerHTML = '<div class="no-data">Fault dataset is empty or unavailable.</div>';
@@ -36,6 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
   populateManufacturers();
   updateSubsystemOptions();
   updateSymptomOptions();
+  renderKnowledgeCards();
   render();
 });
 
@@ -138,6 +143,8 @@ function matchesSearch(fault, text) {
     ...(fault.technical_root_causes || fault.typical_root_causes || []),
     ...(fault.diagnostic_steps || fault.diagnostic_checks_step_by_step || []),
     ...(fault.parts_commonly_involved || []),
+    ...(fault.quick_triage_questions || []),
+    ...(fault.tools_required || []),
   ];
   return haystacks.some((h) => typeof h === 'string' && h.toLowerCase().includes(text));
 }
@@ -181,11 +188,20 @@ function renderFaultCard(fault) {
   const isCritical = CRITICAL_PATTERNS.some((p) =>
     fault.symptom_title.toLowerCase().includes(p)
   );
+  const riskBadge = fault.risk_level
+    ? `<span class="badge risk ${fault.risk_level}">Risk: ${fault.risk_level}</span>`
+    : '';
 
   const sections = [];
   sections.push(renderListSection('Symptom details', fault.symptom_details));
   sections.push(renderListSection('Typical root causes', fault.technical_root_causes || fault.typical_root_causes));
-  sections.push(renderListSection('Diagnostic checks (step-by-step)', fault.diagnostic_steps || fault.diagnostic_checks_step_by_step, true));
+  sections.push(
+    renderListSection(
+      'Diagnostic checks (step-by-step)',
+      fault.diagnostic_steps || fault.diagnostic_checks_step_by_step,
+      true
+    )
+  );
 
   if (Array.isArray(fault.safety_hazards_and_warnings) && fault.safety_hazards_and_warnings.length) {
     sections.push(`
@@ -201,6 +217,20 @@ function renderFaultCard(fault) {
   sections.push(renderListSection('Recommended corrective actions', fault.remedial_actions || fault.recommended_corrective_actions));
   sections.push(renderListSection('Parts commonly involved', fault.parts_commonly_involved));
   sections.push(renderListSection('Manufacturer references / Sources', fault.manufacturer_references_or_sources));
+  sections.push(renderListSection('Quick triage questions', fault.quick_triage_questions));
+  sections.push(renderListSection('Tools required', fault.tools_required));
+  sections.push(renderListSection('Test procedures after fix', fault.test_procedures_after_fix));
+
+  if (Array.isArray(fault.escalation_criteria) && fault.escalation_criteria.length) {
+    sections.push(`
+      <section class="section">
+        <h3>Escalation criteria</h3>
+        <div class="escalation-block">
+          <ul>${fault.escalation_criteria.map((i) => `<li>${i}</li>`).join('')}</ul>
+        </div>
+      </section>
+    `);
+  }
 
   if (fault.notes_for_app) {
     sections.push(`
@@ -219,8 +249,10 @@ function renderFaultCard(fault) {
           <span class="badge">${manufacturer}</span>
           <span class="badge subsystem">${subsystem}</span>
           ${isCritical ? '<span class="badge critical">CRITICAL – STOP AND ESCALATE</span>' : ''}
+          ${riskBadge}
         </div>
       </div>
+      ${renderMetaGrid(fault)}
       ${sections.filter(Boolean).join('')}
       <div class="copy-area">
         <button class="copy-button" id="copyButton">Copy troubleshooting steps</button>
@@ -247,12 +279,17 @@ function renderListSection(title, items, ordered = false) {
 function buildCopyText(fault) {
   const blocks = [
     `Symptom: ${fault.symptom_title}`,
+    renderMetaPlain(fault),
     renderPlain('Symptom details', fault.symptom_details),
     renderPlain('Typical root causes', fault.technical_root_causes || fault.typical_root_causes),
     renderPlain('Diagnostic checks', fault.diagnostic_steps || fault.diagnostic_checks_step_by_step),
     renderPlain('Safety hazards and warnings', fault.safety_hazards_and_warnings),
     renderPlain('Recommended corrective actions', fault.remedial_actions || fault.recommended_corrective_actions),
     renderPlain('Parts commonly involved', fault.parts_commonly_involved),
+    renderPlain('Quick triage questions', fault.quick_triage_questions),
+    renderPlain('Tools required', fault.tools_required),
+    renderPlain('Test procedures after fix', fault.test_procedures_after_fix),
+    renderPlain('Escalation criteria', fault.escalation_criteria),
   ];
   return blocks.filter(Boolean).join('\n\n');
 }
@@ -260,6 +297,14 @@ function buildCopyText(fault) {
 function renderPlain(title, items) {
   if (!Array.isArray(items) || !items.length) return '';
   return `${title}:\n- ${items.join('\n- ')}`;
+}
+
+function renderMetaPlain(fault) {
+  const meta = [];
+  if (fault.risk_level) meta.push(`Risk level: ${fault.risk_level}`);
+  if (fault.estimated_downtime_hours) meta.push(`Estimated downtime: ${fault.estimated_downtime_hours} hrs`);
+  if (fault.required_competence) meta.push(`Required competence: ${fault.required_competence}`);
+  return meta.length ? meta.join(' | ') : '';
 }
 
 function attachCopyHandler(fault) {
@@ -293,4 +338,86 @@ function showCopyFallback(text, fallbackContainer, feedbackEl) {
   textarea.select();
   textarea.setSelectionRange(0, text.length);
   feedbackEl.textContent = 'Clipboard unavailable. Text selected – press Ctrl+C / Cmd+C to copy.';
+}
+
+function renderMetaGrid(fault) {
+  const rows = [];
+  if (fault.risk_level) {
+    rows.push(`<div><div class="meta-label">Risk level</div><div class="meta-value">${fault.risk_level}</div></div>`);
+  }
+  if (fault.estimated_downtime_hours) {
+    rows.push(`<div><div class="meta-label">Estimated downtime</div><div class="meta-value">${fault.estimated_downtime_hours} hrs</div></div>`);
+  }
+  if (fault.required_competence) {
+    rows.push(`<div><div class="meta-label">Required competence</div><div class="meta-value">${fault.required_competence}</div></div>`);
+  }
+  if (!rows.length) return '';
+  return `
+    <section class="section meta-grid">
+      ${rows.join('')}
+    </section>
+  `;
+}
+
+function renderKnowledgeCards() {
+  renderChecklists();
+  renderRescuePrompts();
+  renderSiteNotes();
+  renderTrainingCards();
+}
+
+function renderChecklists() {
+  if (!els.checklistCards || !Array.isArray(PRE_USE_CHECKLISTS)) return;
+  const cards = PRE_USE_CHECKLISTS.map((check) => `
+    <article class="card sub-card">
+      <div class="sub-card-header">
+        <div>
+          <div class="pill">${check.variant}</div>
+          <h3>${check.title}</h3>
+        </div>
+        <div class="tag-row">${(check.mapped_subsystems || []).map((t) => `<span class="chip">${t}</span>`).join('')}</div>
+      </div>
+      ${renderListSection('Checklist', check.steps, true)}
+    </article>
+  `);
+  els.checklistCards.innerHTML = cards.join('');
+}
+
+function renderRescuePrompts() {
+  if (!els.rescuePrompts || !Array.isArray(RESCUE_PROMPTS)) return;
+  const cards = RESCUE_PROMPTS.map((item) => `
+    <article class="card sub-card">
+      <h3>${item.title}</h3>
+      ${renderListSection('Ask before starting', item.prompts)}
+      <div class="escalation-block">
+        <strong>Escalate when:</strong>
+        <p>${item.escalation}</p>
+      </div>
+    </article>
+  `);
+  els.rescuePrompts.innerHTML = cards.join('');
+}
+
+function renderSiteNotes() {
+  if (!els.siteNotes || !Array.isArray(SITE_NOTE_PATTERNS)) return;
+  const cards = SITE_NOTE_PATTERNS.map((item) => `
+    <article class="card sub-card">
+      <h3>${item.site}</h3>
+      ${renderListSection('Common hazards', item.hazards)}
+      ${renderListSection('Mitigations', item.mitigations)}
+    </article>
+  `);
+  els.siteNotes.innerHTML = cards.join('');
+}
+
+function renderTrainingCards() {
+  if (!els.trainingCards || !Array.isArray(TRAINING_CARDS)) return;
+  const cards = TRAINING_CARDS.map((card) => `
+    <article class="card sub-card">
+      <h3>${card.title}</h3>
+      <p class="muted">${card.summary}</p>
+      ${renderListSection('Practice / links', card.links)}
+    </article>
+  `);
+  els.trainingCards.innerHTML = cards.join('');
 }
