@@ -84,16 +84,18 @@ Current focus:
 
 This tool is intended as **supporting guidance only**.
 
-- It **does not replace**:
-  - Site-specific SSOW (Safe System of Work).
-  - O&M manuals and technical documentation.
-  - Risk assessments and rescue plans.
-  - Competent person judgement.
+It **does not replace**:
 
-- Always:
-  - Isolate and secure BMU equipment before intervention.
-  - Follow Work at Height regulations and local legislation.
-  - Escalate critical or unclear situations to your supervisor / technical authority.
+- Site-specific SSOW (Safe System of Work).
+- O&M manuals and technical documentation.
+- Risk assessments and rescue plans.
+- Competent person judgement.
+
+Always:
+
+- Isolate and secure BMU equipment before intervention.
+- Follow Work at Height regulations and local legislation.
+- Escalate critical or unclear situations to your supervisor / technical authority.
 
 If there is any conflict between this app and an official document or instruction, the **official documentation always wins**.
 
@@ -248,7 +250,7 @@ No additional configuration is required.
    - Treat these as high-risk conditions and follow escalation paths.
 
 7. **Copy troubleshooting steps**
-   - Click “Copy troubleshooting steps”.
+   - Click **“Copy troubleshooting steps”**.
    - If supported:
      - The browser copies a plain-text summary to your clipboard.
    - If not supported:
@@ -308,9 +310,7 @@ Each entry in `FAULT_DATA` is a fault pattern object. A typical example:
   "notes_for_app": "Generic pattern applicable to most electric BMUs."
 }
 
-_____
-
-## 7.1 Field meanings
+7.1 Field meanings
 	•	manufacturer
 Manufacturer name or "generic-BMU".
 	•	model_or_range
@@ -338,16 +338,16 @@ Implementation notes, edge cases, or UI hints for this entry.
 
 ⸻
 
-## 8. Extending the app
+8. Extending the app
 
-## 8.1 Adding new faults
+8.1 Adding new faults
 	1.	Open faults-data.js.
 	2.	Add a new object to the FAULT_DATA array.
 	3.	Follow the same structure as existing entries.
 	4.	Ensure all strings and arrays are valid JavaScript.
 	5.	Save and refresh the browser.
 
-## 8.2 Adding new manufacturers or subsystems
+8.2 Adding new manufacturers or subsystems
 	•	Manufacturers
 	•	Add new faults with "manufacturer": "NewManufacturerName".
 	•	The UI derives manufacturer options from the dataset, so the new manufacturer will appear automatically.
@@ -357,7 +357,7 @@ Implementation notes, edge cases, or UI hints for this entry.
 	•	The subsystem dropdown is built dynamically from the filtered dataset:
 	•	No additional code changes required.
 
-## 8.3 Critical fault patterns
+8.3 Critical fault patterns
 
 In app.js, there is a small list or rule that flags certain symptom_title patterns as critical.
 
@@ -369,7 +369,7 @@ To adjust:
 
 ⸻
 
-## 9. Roadmap / future directions
+9. Roadmap / future directions
 
 This prototype is intentionally simple and offline. Future enhancements could include:
 	•	Integration with internal maintenance data
@@ -395,7 +395,7 @@ This prototype is intentionally simple and offline. Future enhancements could in
 
 ⸻
 
-## 10. License / internal use
+10. License / internal use
 
 This prototype is intended primarily for internal demonstration and engineering use.
 	•	If used within a company:
@@ -403,7 +403,4 @@ This prototype is intended primarily for internal demonstration and engineering 
 	•	Ensure any internal data added respects confidentiality and data protection rules.
 	•	The exact licence can be defined by the owning organisation (company open-source, internal-only, etc.).
 
-⸻
-
 If you are extending or reviewing this app, treat it as a starting point: the goal is to evolve it into a robust, officially endorsed diagnostic and training platform for BMU engineers.
-
