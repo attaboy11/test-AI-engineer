@@ -1,5 +1,6 @@
 // faults-data.js
 // BMU fault patterns dataset for BMU Fault Finder app
+// v2: adds risk_level, required_competence, escalation_criteria (backward compatible)
 
 export const BASE_FAULT_DATA = [
   {
@@ -59,6 +60,13 @@ export const BASE_FAULT_DATA = [
       "Symptom could be listed as 'No power / Dead unit'.",
       "Combine cases of total power loss under this pattern (including main supply off, phase loss, e-stop active).",
       "Engineers often first suspect power issues when absolutely nothing operates."
+    ],
+    "risk_level": "high",
+    "required_competence": "competent BMU engineer or qualified electrician",
+    "escalation_criteria": [
+      "Escalate if RCD/breaker trips again immediately after reset.",
+      "Escalate if there are signs of burning, smell, or damaged cabling.",
+      "Escalate if cradle is stranded at height with no safe rescue route identified."
     ]
   },
   {
@@ -117,6 +125,13 @@ export const BASE_FAULT_DATA = [
     "notes_for_fault_finder_app": [
       "In app, phrase as 'BMU won't travel along track (jib not in correct position or cradle fault)'.",
       "Group any track travel issues here, including interlock or limit switch-related stoppages."
+    ],
+    "risk_level": "medium",
+    "required_competence": "competent BMU engineer",
+    "escalation_criteria": [
+      "Escalate if traverse drive attempts to start but trips or makes abnormal mechanical noises.",
+      "Escalate if bypass key or interlock override would be required to move with personnel onboard.",
+      "Escalate if track obstructions or structural interference are suspected."
     ]
   },
   {
@@ -175,6 +190,13 @@ export const BASE_FAULT_DATA = [
       "Symptom phrasing: 'Hoist won't go up (can go down)'.",
       "Include any scenario where up motion is inhibited but down is allowed, usually due to a safety condition.",
       "Engineers should see this as likely limit or overload related."
+    ],
+    "risk_level": "high",
+    "required_competence": "competent BMU engineer",
+    "escalation_criteria": [
+      "Escalate if final upper limit has been hit and you are not trained/authorised for manual lowering off final limit.",
+      "Escalate if load sensor or limit switch appears damaged or misaligned.",
+      "Escalate if hoist drive trips repeatedly on overcurrent when trying to raise with a safe load."
     ]
   },
   {
@@ -234,6 +256,13 @@ export const BASE_FAULT_DATA = [
       "Symptom entry: 'Hoist won't go down'.",
       "Include all scenarios where down motion is locked out due to safety triggers.",
       "Combine trip bar, slack rope, overspeed under this for simplicity – in an app, an engineer selecting 'Hoist won't lower' would get steps covering all."
+    ],
+    "risk_level": "high",
+    "required_competence": "competent BMU engineer",
+    "escalation_criteria": [
+      "Escalate if overspeed/safety brake cannot be reset following the standard procedure.",
+      "Escalate if ropes show damage, kinks, or birdcaging when investigating slack/obstruction.",
+      "Escalate if platform remains stuck with persons onboard and no clear recovery path within site rescue plan."
     ]
   },
   {
@@ -292,6 +321,13 @@ export const BASE_FAULT_DATA = [
       "Symptom for app: 'Platform drifting down (brake not holding)'.",
       "This should trigger an immediate 'do not use' warning in the app and guidance to secure and repair.",
       "Likely categorized under critical hoist faults."
+    ],
+    "risk_level": "critical",
+    "required_competence": "senior BMU engineer / OEM specialist",
+    "escalation_criteria": [
+      "Escalate immediately if any uncontrolled descent or repeated creep is observed.",
+      "Escalate if brake torque cannot be verified to spec with appropriate test.",
+      "Escalate if overspeed safety has engaged at any point during creep events."
     ]
   },
   {
@@ -349,6 +385,13 @@ export const BASE_FAULT_DATA = [
       "Symptom: 'Platform out-of-level'.",
       "This can be grouped under hoist synchronization faults.",
       "In an app, might prompt if the BMU has multiple hoists, since single-hoist systems cannot tilt by themselves."
+    ],
+    "risk_level": "critical",
+    "required_competence": "competent BMU engineer",
+    "escalation_criteria": [
+      "Escalate if tilt exceeds manufacturer’s allowed angle or trips tilt safety.",
+      "Escalate if ropes on one side show slack, damage, or uneven tension that cannot be corrected quickly.",
+      "Escalate if repeated tilting occurs despite balanced loading and correct operation."
     ]
   },
   {
@@ -409,6 +452,13 @@ export const BASE_FAULT_DATA = [
       "Symptom: 'Jib not moving (up/down)'.",
       "Could be presented as 'Jib stuck' in the app.",
       "Likely group issues with either hydraulic or electric luff systems here."
+    ],
+    "risk_level": "medium",
+    "required_competence": "competent BMU engineer with basic hydraulics",
+    "escalation_criteria": [
+      "Escalate if hydraulic leaks, burst hoses, or damaged cylinders are observed.",
+      "Escalate if jib is stuck in a position creating collision risk with façade or other structure.",
+      "Escalate if any manual jacking/pumping would be required at height without a clear rescue plan."
     ]
   },
   {
@@ -467,6 +517,13 @@ export const BASE_FAULT_DATA = [
       "Symptom: 'Cannot rotate jib'.",
       "Covers limit hits and brake issues which are common causes.",
       "Multiple error codes for slew motor (if VFD) can be handled within this pattern as well."
+    ],
+    "risk_level": "medium",
+    "required_competence": "competent BMU engineer",
+    "escalation_criteria": [
+      "Escalate if slew motor or gearbox is suspected mechanically jammed or damaged.",
+      "Escalate if slew lock/brake must be manually released while jib is over an edge or in wind.",
+      "Escalate if repeated drive faults occur even with free rotation and no mechanical binding."
     ]
   },
   {
@@ -525,6 +582,13 @@ export const BASE_FAULT_DATA = [
       "Symptom: 'Jib extension stuck'.",
       "Applies to any BMU with extendable jib sections, prevalent in Manntech modular designs.",
       "Could be combined with luffing issues in a broad 'boom movement fault', but better separate for clarity."
+    ],
+    "risk_level": "medium",
+    "required_competence": "competent BMU engineer with basic hydraulics",
+    "escalation_criteria": [
+      "Escalate if there is visible deformation or misalignment of telescopic sections.",
+      "Escalate if movement would require working on the jib structure at height without proper access or support.",
+      "Escalate if hydraulic or mechanical components appear damaged or seized."
     ]
   },
   {
@@ -582,6 +646,13 @@ export const BASE_FAULT_DATA = [
       "Symptom in app: 'Overload tripped'.",
       "This covers genuine overweight and false alarms alike, guiding to check load then sensor.",
       "Could unify multiple overload code readings into this one troubleshooting path."
+    ],
+    "risk_level": "medium",
+    "required_competence": "apprentice with supervision or competent BMU engineer",
+    "escalation_criteria": [
+      "Escalate if overload alarm persists with empty or near-empty cradle.",
+      "Escalate if any deformation or mechanical damage is observed at load sensor or suspension points.",
+      "Escalate if operators repeatedly exceed SWL or ignore overload alarms (training/management issue)."
     ]
   },
   {
@@ -639,6 +710,13 @@ export const BASE_FAULT_DATA = [
       "Symptom: 'Slack rope device keeps tripping'.",
       "Good to group with other rope safety issues if needed, but slack rope is specific.",
       "The app might ask if the cradle hit something or ropes look slack to narrow cause."
+    ],
+    "risk_level": "high",
+    "required_competence": "competent BMU engineer",
+    "escalation_criteria": [
+      "Escalate if slack rope trips repeatedly at the same height or location.",
+      "Escalate if wire rope shows visible damage, kinks, or birdcaging.",
+      "Escalate if safe lowering cannot be achieved without repeatedly defeating slack rope protection."
     ]
   },
   {
@@ -695,6 +773,13 @@ export const BASE_FAULT_DATA = [
       "Symptom: 'Overspeed brake engaged / platform suddenly stopped'.",
       "In an app workflow, after ensuring platform is secure, guidance to reset will be needed.",
       "Group any sudden stop with safety brake here, user might not know overspeed vs other safety, but context (loud click, both directions blocked) helps."
+    ],
+    "risk_level": "critical",
+    "required_competence": "senior BMU engineer / OEM specialist",
+    "escalation_criteria": [
+      "Always escalate to OEM/service manager before returning BMU to normal service after overspeed engagement.",
+      "Escalate if root cause of overspeed cannot be clearly identified and corrected.",
+      "Escalate if any damage to rope, hoist, or brake components is visible after the event."
     ]
   },
   {
@@ -753,6 +838,13 @@ export const BASE_FAULT_DATA = [
       "Symptom: 'E-stop stuck on'.",
       "In app, user might just say 'Cannot reset emergency stop'.",
       "Direct them to check all stations; often overlooked that multiple E-stops exist."
+    ],
+    "risk_level": "high",
+    "required_competence": "competent BMU engineer",
+    "escalation_criteria": [
+      "Escalate if E-stop safety relay or PLC safety module appears defective or cannot be reset.",
+      "Escalate if safety loop integrity cannot be restored quickly and BMU is needed for access or rescue.",
+      "Escalate if there is evidence of wiring damage in difficult-to-access locations (boom, cradle cable runs)."
     ]
   },
   {
@@ -812,6 +904,13 @@ export const BASE_FAULT_DATA = [
       "Symptom: 'Stops before end of travel' or 'final limit reached'.",
       "Engineers might select 'Limit switch issue' in an app to get this guidance.",
       "Combine similar issues (all motions limits) under one pattern, since troubleshooting approach is alike."
+    ],
+    "risk_level": "high",
+    "required_competence": "competent BMU engineer",
+    "escalation_criteria": [
+      "Escalate if final limit has been hit with any apparent structural impact or hard stop.",
+      "Escalate if you cannot reliably reset and re-set normal limits to safe positions.",
+      "Escalate if limits are not clearly documented on drawings and you are unsure of correct setting points."
     ]
   },
   {
@@ -872,6 +971,13 @@ export const BASE_FAULT_DATA = [
       "Symptom: 'Power cuts out on track'.",
       "Combine busbar and cable feed issues, as symptomatically similar (loss of power at certain positions).",
       "Prompt user to specify if they have busbar or cable to tailor some steps."
+    ],
+    "risk_level": "high",
+    "required_competence": "competent BMU engineer or electrician",
+    "escalation_criteria": [
+      "Escalate if you see arcing, burnt sections, or severe busbar/cable damage.",
+      "Escalate if cradle is likely to be stranded at height with no safe manual recovery.",
+      "Escalate if intermittent power loss cannot be reproduced or eliminated after cleaning and basic checks."
     ]
   },
   {
@@ -931,6 +1037,13 @@ export const BASE_FAULT_DATA = [
       "Symptom: 'Radio remote not working'.",
       "The app could first ask if wired controls work to differentiate remote issues.",
       "This pattern addresses common user errors (battery, E-stop) first, which solves many cases."
+    ],
+    "risk_level": "low",
+    "required_competence": "apprentice with supervision",
+    "escalation_criteria": [
+      "Escalate if remote receiver or radio safety system appears defective.",
+      "Escalate if there are repeated unexplained losses of control link in critical positions.",
+      "Escalate if management requests remote-only operation without resolving reliability issues."
     ]
   },
   {
@@ -990,6 +1103,13 @@ export const BASE_FAULT_DATA = [
       "Symptom: 'Pendant control issues'.",
       "In-app, might ask which functions are failing to help pinpoint likely broken wire.",
       "Key is to direct user to check cable and connectors straightforwardly first."
+    ],
+    "risk_level": "medium",
+    "required_competence": "competent BMU engineer or electrician",
+    "escalation_criteria": [
+      "Escalate if pendant faults cause unexpected or uncontrolled motion.",
+      "Escalate if multiple cores show damage and there is risk of cross-connection between commands.",
+      "Escalate if pendant replacement does not restore full reliable control."
     ]
   },
   {
@@ -1051,6 +1171,13 @@ export const BASE_FAULT_DATA = [
       "Symptom: 'Hydraulic function not moving'.",
       "Likely used in app if user indicates a hydraulic-driven motion is dead.",
       "Can refine to check if pump runs or not, possibly via a follow-up question."
+    ],
+    "risk_level": "high",
+    "required_competence": "competent BMU engineer with hydraulic experience",
+    "escalation_criteria": [
+      "Escalate if major hydraulic leak or ruptured hose is found.",
+      "Escalate if pump is not building pressure and root cause is unclear.",
+      "Escalate if any hydraulic work would require depressurising or disassembling high-pressure components without proper tooling."
     ]
   },
   {
@@ -1109,6 +1236,13 @@ export const BASE_FAULT_DATA = [
       "Symptom: 'Hydraulic jib creeps down'.",
       "This pattern would be used if user notes gradual jib descent.",
       "It emphasizes seal issues and is specific to hydraulic systems (Manntech likely since CoxGomyl largely electric drives in newer units)."
+    ],
+    "risk_level": "high",
+    "required_competence": "competent BMU engineer with hydraulic experience",
+    "escalation_criteria": [
+      "Escalate if jib drift is fast enough to risk contact with façade or structure during a shift.",
+      "Escalate if drift persists after basic checks and system bleed.",
+      "Escalate if cylinder or counterbalance valve needs to be removed or bench-tested (OEM or specialist level)."
     ]
   },
   {
@@ -1167,6 +1301,13 @@ export const BASE_FAULT_DATA = [
       "Symptom: 'Interlock prevents movement'.",
       "In app, might list specific ones like 'Parking pins still in' or 'Gate open'. All funnel here with similar troubleshooting.",
       "Important to ensure user checks all possibilities."
+    ],
+    "risk_level": "medium",
+    "required_competence": "apprentice with supervision or competent BMU engineer",
+    "escalation_criteria": [
+      "Escalate if you need to hard-bridge or defeat an interlock to move the BMU.",
+      "Escalate if any tie-down, gate, or lock sensor is damaged or cannot be aligned.",
+      "Escalate if interlock logic is unclear from documentation and you cannot safely verify its function."
     ]
   },
   {
@@ -1222,6 +1363,13 @@ export const BASE_FAULT_DATA = [
       "Symptom: 'Wind cut-out active'.",
       "The app might ask current wind conditions to confirm. Could also cover sensor faults under this category.",
       "Ensures user knows not to circumvent without proper evaluation."
+    ],
+    "risk_level": "medium",
+    "required_competence": "competent BMU engineer",
+    "escalation_criteria": [
+      "Escalate if management pressures to override wind interlock while actual wind remains high.",
+      "Escalate if anemometer is known faulty and BMU must be used without automatic wind cut-out.",
+      "Escalate if repeated nuisance wind trips occur and cannot be correlated with real conditions."
     ]
   },
   {
@@ -1281,6 +1429,13 @@ export const BASE_FAULT_DATA = [
       "Symptom: 'Drive fault code [X]'.",
       "The app could list common codes and their meaning. This pattern then provides general advice applicable to many drive trips.",
       "Important to correlate code to cause (maybe provide a lookup if app capable)."
+    ],
+    "risk_level": "high",
+    "required_competence": "competent BMU engineer with electrical/VFD experience",
+    "escalation_criteria": [
+      "Escalate if the same drive fault code recurs after basic load and cooling checks.",
+      "Escalate if hoist/travel drive faults with passengers onboard and cannot be cleared safely.",
+      "Escalate if drive parameters, braking resistor sizing, or motor data are unclear or inconsistent with drawings."
     ]
   },
   {
@@ -1339,6 +1494,13 @@ export const BASE_FAULT_DATA = [
       "Symptom: 'Hoist overheats/stops'.",
       "In-app it might ask if there's an error or just stops until cooled, to differentiate from drive fault.",
       "This pattern raises awareness of duty cycle – a common oversight by operators."
+    ],
+    "risk_level": "high",
+    "required_competence": "competent BMU engineer",
+    "escalation_criteria": [
+      "Escalate if there is any sign of burning smell, smoke, or insulation damage.",
+      "Escalate if hoist repeatedly overheats under clearly within-spec loads and duty cycle.",
+      "Escalate if brake drag cannot be eliminated via normal adjustment."
     ]
   },
   {
@@ -1398,6 +1560,13 @@ export const BASE_FAULT_DATA = [
       "Symptom: 'Hoist runs but no lifting (rope slipping)'.",
       "Likely applies to traction hoists (Tractel), included as distinct from motor/brake issues.",
       "Warn user strongly not to push through a slip; it's a critical maintenance issue."
+    ],
+    "risk_level": "critical",
+    "required_competence": "senior BMU engineer / OEM specialist",
+    "escalation_criteria": [
+      "Escalate immediately if any significant rope slip is observed under load.",
+      "Escalate if traction components (drum, liner, pressure roller) appear severely worn or deformed.",
+      "Escalate if rope/drum replacement is needed or slippage cannot be eliminated with basic cleaning/adjustment."
     ]
   }
 ];
