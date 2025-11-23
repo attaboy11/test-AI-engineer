@@ -310,7 +310,7 @@ Each entry in `FAULT_DATA` is a fault pattern object. A typical example:
 
 _____
 
-7.1 Field meanings
+## 7.1 Field meanings
 	•	manufacturer
 Manufacturer name or "generic-BMU".
 	•	model_or_range
@@ -338,16 +338,16 @@ Implementation notes, edge cases, or UI hints for this entry.
 
 ⸻
 
-8. Extending the app
+## 8. Extending the app
 
-8.1 Adding new faults
+## 8.1 Adding new faults
 	1.	Open faults-data.js.
 	2.	Add a new object to the FAULT_DATA array.
 	3.	Follow the same structure as existing entries.
 	4.	Ensure all strings and arrays are valid JavaScript.
 	5.	Save and refresh the browser.
 
-8.2 Adding new manufacturers or subsystems
+## 8.2 Adding new manufacturers or subsystems
 	•	Manufacturers
 	•	Add new faults with "manufacturer": "NewManufacturerName".
 	•	The UI derives manufacturer options from the dataset, so the new manufacturer will appear automatically.
@@ -357,7 +357,7 @@ Implementation notes, edge cases, or UI hints for this entry.
 	•	The subsystem dropdown is built dynamically from the filtered dataset:
 	•	No additional code changes required.
 
-8.3 Critical fault patterns
+## 8.3 Critical fault patterns
 
 In app.js, there is a small list or rule that flags certain symptom_title patterns as critical.
 
@@ -369,7 +369,7 @@ To adjust:
 
 ⸻
 
-9. Roadmap / future directions
+## 9. Roadmap / future directions
 
 This prototype is intentionally simple and offline. Future enhancements could include:
 	•	Integration with internal maintenance data
@@ -395,7 +395,7 @@ This prototype is intentionally simple and offline. Future enhancements could in
 
 ⸻
 
-10. License / internal use
+## 10. License / internal use
 
 This prototype is intended primarily for internal demonstration and engineering use.
 	•	If used within a company:
