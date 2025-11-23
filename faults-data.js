@@ -5,6 +5,30 @@ const FAULT_DATA = [
     "id": "coxgomyl_hoistdrive_001",
     "manufacturer": "CoxGomyl",
     "sub_system": "Hoist Drive",
+    "risk_level": "critical",
+    "estimated_downtime_hours": "4–10",
+    "required_competence": "Competent BMU engineer (hoist specialist) – OEM escalation if brake coil or motor requires rewind",
+    "quick_triage_questions": [
+      "Did the platform descend unexpectedly or fail to hold when stopped?",
+      "Is the motor overload tripping within seconds even on light load?",
+      "Is there any sign of brake drag (burnt smell, high current at idle)?"
+    ],
+    "tools_required": [
+      "Clamp meter for three-phase current checks",
+      "Multimeter for voltage and resistance",
+      "Feeler gauges for brake air-gap",
+      "IR thermometer for thermal profiling"
+    ],
+    "test_procedures_after_fix": [
+      "No-load hoist run observing current symmetry",
+      "Full-load lift with mid-travel stop to confirm brake hold",
+      "Thermal soak test (15–20 minutes cycling) with temperature check"
+    ],
+    "escalation_criteria": [
+      "Any sign of uncontrolled descent or brake failing to hold the platform",
+      "Persistent phase imbalance from building supply that site cannot rectify",
+      "Motor insulation resistance below OEM minimum after cooldown"
+    ],
     "symptom_title": "Hoist motor overheats and trips frequently",
     "symptom_details": [
       "Hoist motor or winch shuts off during lifting, often after a short run time",
@@ -41,6 +65,30 @@ const FAULT_DATA = [
     "id": "manntech_hoistdrive_002",
     "manufacturer": "Manntech",
     "sub_system": "Hoist Drive",
+    "risk_level": "critical",
+    "estimated_downtime_hours": "2–6",
+    "required_competence": "Competent BMU engineer – rope access or OEM support if brake swap is complex",
+    "quick_triage_questions": [
+      "Does the brake audibly click and release when lift is commanded?",
+      "Does lifting improve when using slow/maintenance speed?",
+      "Is supply voltage sagging more than 10% when lifting near SWL?"
+    ],
+    "tools_required": [
+      "Multimeter for coil voltage and rectifier checks",
+      "Clamp meter for current during lift",
+      "Basic hand tools for brake cover removal",
+      "Dial gauge or feeler gauge for brake clearance"
+    ],
+    "test_procedures_after_fix": [
+      "Static brake hold test at mid-height",
+      "Gradual load test up to SWL monitoring current",
+      "Emergency stop / overspeed brake confirmation"
+    ],
+    "escalation_criteria": [
+      "Brake coil is open circuit or mechanically seized",
+      "Secondary brake triggers repeatedly during test lifts",
+      "Motor cannot reach rated torque after electrical fixes"
+    ],
     "symptom_title": "Hoist cannot lift full load or slips downward slightly",
     "symptom_details": [
       "BMU hoisting is sluggish or stalls when raising a platform near its SWL (Safe Working Load)",
@@ -78,6 +126,30 @@ const FAULT_DATA = [
     "id": "generic_hoistdrive_003",
     "manufacturer": "Generic",
     "sub_system": "Hoist Drive",
+    "risk_level": "high",
+    "estimated_downtime_hours": ">8",
+    "required_competence": "Senior BMU engineer with gearbox rebuild experience",
+    "quick_triage_questions": [
+      "Is the noise localized to gearbox or motor bearings?",
+      "Is gearbox oil level low, burnt, or metallic?",
+      "Did vibration or current spike right before trip-out?"
+    ],
+    "tools_required": [
+      "Mechanic’s stethoscope",
+      "Oil sampling kit or clean container",
+      "Torque wrench for reassembly",
+      "Dial indicator for shaft play"
+    ],
+    "test_procedures_after_fix": [
+      "Slow-speed functional run after rebuild",
+      "Load test with vibration/current trending",
+      "Temperature check after 30 minutes of cycling"
+    ],
+    "escalation_criteria": [
+      "Gear teeth found chipped or excessive end-float present",
+      "Motor shaft play exceeds OEM tolerance",
+      "Safety brake activates due to seizure during testing"
+    ],
     "symptom_title": "Abnormal grinding noise or seizure in hoist mechanism",
     "symptom_details": [
       "Loud grinding, knocking, or whining noises emanate from the hoist/gearbox area during BMU movement",
@@ -115,6 +187,30 @@ const FAULT_DATA = [
     "id": "tractel_hoistdrive_004",
     "manufacturer": "Tractel",
     "sub_system": "Hoist Drive",
+    "risk_level": "critical",
+    "estimated_downtime_hours": "1–4",
+    "required_competence": "Competent BMU engineer – OEM consultation for traction liner replacement if unsure",
+    "quick_triage_questions": [
+      "Is the rope diameter within the hoist’s specified tolerance?",
+      "Do traction sheave/rollers look glazed or contaminated?",
+      "Is the tension spring/weight moving freely?"
+    ],
+    "tools_required": [
+      "Calipers for rope diameter",
+      "Cleaning kit (solvent, lint-free cloths)",
+      "Spring scale or tension gauge if specified",
+      "Basic hand tools for liner access"
+    ],
+    "test_procedures_after_fix": [
+      "Light-load traction test at low height",
+      "Full-load hoist run verifying no slip and correct rope tracking",
+      "Blocstop / secondary brake functional check"
+    ],
+    "escalation_criteria": [
+      "Any recurring rope slip after liner or rope replacement",
+      "Visible rope damage (flattening, glazing, broken wires)",
+      "No available tension adjustment range to achieve grip"
+    ],
     "symptom_title": "Traction hoist motor runs but rope slips (no lift)",
     "symptom_details": [
       "Hoist motor can be heard running, but the suspended platform does not rise or only jerks slightly – the hoist drum/sheave is turning without hauling the rope",
@@ -147,5 +243,120 @@ const FAULT_DATA = [
     ],
     "compliance_standard": "EN 1808 (Sections on powered hoists – requires friction hoists have secondary brake; rope integrity per ISO 4309 must be ensured); ISO 4309 for rope selection and retirement criteria",
     "confidence": "High"
+  }
+];
+
+const PRE_USE_CHECKLISTS = [
+  {
+    id: "generic_preuse",
+    title: "Generic BMU pre-use checklist",
+    variant: "Generic",
+    mapped_subsystems: ["ropes", "brakes", "travel"],
+    steps: [
+      "Confirm permit-to-work / SSOW in place and weather within limits",
+      "Visual check of ropes (kinks, birdcaging, crushed strands)",
+      "Test emergency stop, limit switches, and safety circuit reset",
+      "Verify brakes release/engage audibly in slow speed before lift",
+      "Confirm rescue plan on-site and radio check completed"
+    ]
+  },
+  {
+    id: "cox_preuse",
+    title: "CoxGomyl pre-use essentials",
+    variant: "CoxGomyl",
+    mapped_subsystems: ["hoist", "controls", "emergency lowering"],
+    steps: [
+      "Check trolleys/rails for clear travel path and end-stop condition",
+      "Inspect Blocstop / secondary brake indicator for readiness",
+      "Run cradle at low speed full travel, verifying encoder/limit response",
+      "Test emergency lowering or manual descent per O&M (no load)"
+    ]
+  },
+  {
+    id: "tractel_preuse",
+    title: "Tractel traction hoist pre-use",
+    variant: "Tractel",
+    mapped_subsystems: ["ropes", "traction", "safety brakes"],
+    steps: [
+      "Check rope diameter stamp matches hoist spec and inspect for polishing",
+      "Verify pressure rollers/liners are free from oil and properly seated",
+      "Confirm Blocstop test completed and reset procedure understood",
+      "Function-test upper/lower limits with no personnel in cradle"
+    ]
+  }
+];
+
+const RESCUE_PROMPTS = [
+  {
+    id: "rescue_secondary_escape",
+    title: "Rescue / emergency prompts",
+    prompts: [
+      "Does the RRE plan provide a secondary escape route if power fails?",
+      "Who holds the site key/permission for roof access during rescue?",
+      "Is there a certified anchor for hauling/rescue lines near the BMU?",
+      "Is a manual lowering device or handwheel available and tested this week?"
+    ],
+    escalation: "If any answer is unknown or negative, stop and escalate to the site manager and OEM before use."
+  }
+];
+
+const SITE_NOTE_PATTERNS = [
+  {
+    id: "site_shard",
+    site: "Shard-inspired high-rise",
+    hazards: [
+      "Severe wind tunnelling at corner drops causing sway",
+      "Limited tie-back points at intermediate levels",
+      "Night working restrictions for facade lighting"
+    ],
+    mitigations: [
+      "Use wind anemometer and stop work above agreed threshold (e.g. 12 m/s)",
+      "Plan mid-landing rests; use temporary guy lines where permitted",
+      "Coordinate timings with building management to avoid lighting schedules"
+    ]
+  },
+  {
+    id: "site_nova",
+    site: "Nova-style mixed use",
+    hazards: [
+      "Public thoroughfares directly under BMU path",
+      "Multiple BMUs sharing power/controls",
+      "Glazed facades sensitive to chemical cleaners"
+    ],
+    mitigations: [
+      "Set up exclusion zones and banksman before deployment",
+      "Lock-out unused BMUs during work to avoid cross-activation",
+      "Use approved neutral pH cleaners and rinse controls"
+    ]
+  }
+];
+
+const TRAINING_CARDS = [
+  {
+    id: "training_brakes",
+    title: "BMU brakes 101",
+    summary: "Difference between service brake (motor-mounted) and safety/Blocstop; how air-gap and coil voltage affect slip.",
+    links: [
+      "See fault patterns: traction slip, brake drag",
+      "Practice: measure brake gap with feeler gauge and compare to spec"
+    ]
+  },
+  {
+    id: "training_governors",
+    title: "Overspeed governors",
+    summary: "Mechanical vs electronic overspeed detection, trip speeds, and reset protocols.",
+    links: [
+      "Checklist: confirm governor reset tool on site",
+      "Drill: simulate overspeed trip in maintenance mode"
+    ]
+  },
+  {
+    id: "training_plc_relay",
+    title: "PLC vs relay logic",
+    summary: "How PLC-controlled BMUs interlock safety chain versus classic relay ladders; where to probe safely.",
+    links: [
+      "Identify: locate safety relays vs PLC safety modules in panel",
+      "Exercise: trace safety circuit on latest BMU drawing"
+    ]
   }
 ];
