@@ -195,7 +195,13 @@ function renderFaultCard(fault) {
   const sections = [];
   sections.push(renderListSection('Symptom details', fault.symptom_details));
   sections.push(renderListSection('Typical root causes', fault.technical_root_causes || fault.typical_root_causes));
-  sections.push(renderListSection('Diagnostic checks (step-by-step)', fault.diagnostic_steps || fault.diagnostic_checks_step_by_step, true));
+  sections.push(
+    renderListSection(
+      'Diagnostic checks (step-by-step)',
+      fault.diagnostic_steps || fault.diagnostic_checks_step_by_step,
+      true
+    )
+  );
 
   if (Array.isArray(fault.safety_hazards_and_warnings) && fault.safety_hazards_and_warnings.length) {
     sections.push(`
